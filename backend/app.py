@@ -1,7 +1,11 @@
 from flask import Flask, jsonify, request, abort
+from flask_cors import CORS
 from data_service import DataService
 
 app = Flask(__name__)
+CORS(app)
+
+dataservice = DataService()
 
 @app.route('/')
 def home():
@@ -9,16 +13,13 @@ def home():
 
 
 @app.route('/check-comment', methods=['POST'])
-def check_comment(comment):
-    # Vérifier si le commentaire est dans la base de données
-        # si non, return http NOT_FOUND
-        if (not DataService.is_in_db()):
-             abort(404)
-        else:
-            comment_status = DataService.verify_comment(comment)
+def check_comment():
+        comment = request.json.get('comment')
+        # Vérifier si le commentaire est négatif ou positif
+        is_negative = dataservice.verify_comment(comment)
 
-
-        return jsonify(status=comment_status)
+        status = 'negative' if is_negative else 'positive'
+        return jsonify({'status': status})
 
 if __name__ == '__main__':
     app.run(debug=True)
