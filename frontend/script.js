@@ -6,8 +6,6 @@ document.getElementById('submit-button').addEventListener('click', () => {
     host = '127.0.0.1'
     port = ':5000'
     path = '/check-comment'
-    param = '?comment=' + comment
-    // url = protocol + host + port + path + param
     url = protocol + host + port + path
 
     axios.post(url, {
@@ -30,7 +28,7 @@ document.getElementById('submit-button').addEventListener('click', () => {
               document.getElementById('status').style.color = "orange";
               break
             case 'suicidal':
-              document.getElementById('status').textContent = "Vous êtes suicidaire ..."
+              document.getElementById('status').textContent = "Super l'ambiance ..."
               document.getElementById('status').style.color = "red";
             default:
               console.error('NO STATUS !!!')
