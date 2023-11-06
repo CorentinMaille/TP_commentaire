@@ -18,8 +18,6 @@ def check_comment():
         # Vérifier si le commentaire est négatif ou positif
         status = dataservice.verify_comment(comment)
 
-        print('STATUS : ' + status)
-
         return jsonify({'status': status})
 
 if __name__ == '__main__':
