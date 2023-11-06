@@ -16,9 +16,8 @@ def home():
 def check_comment():
         comment = request.json.get('comment')
         # Vérifier si le commentaire est négatif ou positif
-        is_negative = dataservice.verify_comment(comment)
+        status = dataservice.verify_comment(comment)
 
-        status = 'negative' if is_negative else 'positive'
         return jsonify({'status': status})
 
 if __name__ == '__main__':

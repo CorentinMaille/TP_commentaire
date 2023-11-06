@@ -74,8 +74,8 @@ class DataService:
         # Predict
         encoded_comment = self.vectorizer.transform([clean_comment])
         prediction = self.model.predict(encoded_comment)
-        return prediction[0]
 
+        return self.get_status_label_from_code(prediction[0]);
 
     def load_model(self):
         if os.path.exists(model_path):    
@@ -91,3 +91,11 @@ class DataService:
             joblib.dump(model, model_path)
             return model 
     
+    # Translate status code to status label
+    def get_status_label_from_code(status_code):
+        if status_code == 0:
+            return 'negative'
+        elif status_code == 1:
+            return 'positive'
+        else:
+            return 'suicidal'
