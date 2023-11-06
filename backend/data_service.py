@@ -1,21 +1,23 @@
 import pandas as pd
 import spacy
+import os
+import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
 
+model_path = '../data/model.joblib'
+vectorizer_path = '../data/vectorizer.joblib'
+
 class DataService:
     def __init__(self):
         # Load Natural Language Processing english Model
         self.nlp = spacy.load('en_core_web_sm')
 
-        # Load CSV data
-        self.dataframe = self.load_and_clean_csv()
-
-        # Train model
-        self.model = self.train_model()
+        # Load AI model
+        self.model = self.load_model()
 
 
     def treat_comment(self, comment):
@@ -52,6 +54,9 @@ class DataService:
         X = self.vectorizer.fit_transform(self.dataframe["comment_text"])
         X, Y
 
+        # Save vectorizer
+        joblib.dump(self.vectorizer, vectorizer_path)
+
         # Train model
         X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size=0.25,random_state=42)
         model = LogisticRegression()
@@ -60,10 +65,29 @@ class DataService:
 
     
     def verify_comment(self, comment):
+        # Clean comment
         clean_comment = self.treat_comment(comment)
+
+        # Load vectorizer
+        self.vectorizer = joblib.load(vectorizer_path)
+
+        # Predict
         encoded_comment = self.vectorizer.transform([clean_comment])
         prediction = self.model.predict(encoded_comment)
         return prediction[0]
 
-    
+
+    def load_model(self):
+        if os.path.exists(model_path):    
+            return joblib.load(model_path)
+        else:
+            # Load CSV data
+            self.dataframe = self.load_and_clean_csv()
+            
+            # Train AI model
+            model = self.train_model()
+            
+            # Save model
+            joblib.dump(model, model_path)
+            return model 
     
