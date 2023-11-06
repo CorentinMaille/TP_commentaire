@@ -8,6 +8,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
+from googletrans import Translator
+
 
 model_path = '../data/model.joblib'
 vectorizer_path = '../data/vectorizer.joblib'
@@ -89,8 +91,13 @@ class DataService:
 
     
     def verify_comment(self, comment):
+        # Translate comment to english
+        translator = Translator()
+        detected_language = translator.detect(comment).lang
+        translated_text = translator.translate(comment, src=detected_language, dest='en')
+
         # Clean comment
-        clean_comment = self.treat_comment(comment)
+        clean_comment = self.treat_comment(translated_text.text)
 
         # Load vectorizer
         self.vectorizer = joblib.load(vectorizer_path)
