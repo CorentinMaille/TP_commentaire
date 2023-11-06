@@ -22,13 +22,16 @@ document.getElementById('submit-button').addEventListener('click', () => {
       } else {
           switch (response.data.status) {
             case 'positive':
-              document.getElementById('status').textContent = "POSITIF !!!"
+              document.getElementById('status').textContent = "Merci mon pote !"
               document.getElementById('status').style.color = "green";
               break;
             case 'negative':
-              document.getElementById('status').textContent = "NEGATIF !!!"
-              document.getElementById('status').style.color = "red";
+              document.getElementById('status').textContent = "Pas très gentil tout ça !"
+              document.getElementById('status').style.color = "orange";
               break
+            case 'suicidal':
+              document.getElementById('status').textContent = "Vous êtes suicidaire ..."
+              document.getElementById('status').style.color = "red";
             default:
               console.error('NO STATUS !!!')
               break;
